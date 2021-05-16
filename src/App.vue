@@ -16,6 +16,14 @@
         <div class="grid-container" v-if="grid">
             <Grid :grid="paintedGrid" />
         </div>
+        <div class="leader-board-container">
+            <h4>Leaderboard</h4>
+            <ul>
+                <li v-for="(item, key) in sortedLeaderBoard" :key="key">
+                    {{ item }}
+                </li>
+            </ul>
+        </div>
     </div>
 </template>
 
@@ -55,6 +63,8 @@ export default {
             difficultyGauge: 1.1,
 
             running: true,
+
+            leaderBoard: [],
         };
     },
     computed: {
@@ -65,6 +75,9 @@ export default {
                 grid[section.y][section.x] = 2;
             });
             return grid;
+        },
+        sortedLeaderBoard() {
+            return [...this.leaderBoard].sort();
         },
     },
     methods: {
@@ -88,12 +101,20 @@ export default {
                     this.grid = result.grid;
                     this.body = result.body;
                     this.position = result.position;
-                    this.tickerSpeed = this.tickerSpeed / this.difficultyGauge;
+
+                    const speed = this.tickerSpeed / this.difficultyGauge;
+                    this.tickerSpeed = speed > 100 ? speed : 100;
+
                     this.setupTicker(this.tickerSpeed);
                 } else if (result.status === "move") {
                     this.body = result.body;
                     this.position = result.position;
                 }
+            } else {
+                this.running = false;
+                this.leaderBoard.push(this.body.length);
+                alert("game over! score: " + this.body.length);
+                this.resetGame();
             }
         },
         updateCycle() {
@@ -127,17 +148,19 @@ export default {
                 }
             });
         },
-        setupTicker(speed) {
+        setupTicker() {
             clearInterval(this.ticker);
             this.ticker = setInterval(() => {
                 if (this.running) {
                     this.updateCycle();
                 }
-            }, speed);
-            console.log(speed);
+            }, this.tickerSpeed);
+            // console.log(this.tickerSpeed);
         },
         resetGame() {
+            this.body = [];
             this.initGrid();
+            this.tickerSpeed = DEFAULT_SPEED;
             this.setupTicker(DEFAULT_SPEED);
         },
     },

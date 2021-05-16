@@ -34,7 +34,11 @@ const SnakeService = {
 			return null;
 		}
 
-		if (grid[y][x] == 1 || grid[y][x] == 2) {
+		const collision = body.find((section) => {
+			return section.x == x && section.y == y;
+		});
+
+		if (collision) {
 			// console.log("self collision");
 			return null;
 		}
