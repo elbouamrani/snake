@@ -18,11 +18,11 @@
         </div>
         <div class="leader-board-container">
             <h4>Leaderboard</h4>
-            <ul>
-                <li v-for="(item, key) in sortedLeaderBoard" :key="key">
-                    {{ item }}
-                </li>
-            </ul>
+            <table>
+                <tr v-for="(item, key) in sortedLeaderBoard" :key="key">
+                    <td>{{ item }}</td>
+                </tr>
+            </table>
         </div>
     </div>
 </template>
@@ -74,6 +74,9 @@ export default {
             this.body.map((section) => {
                 grid[section.y][section.x] = 2;
             });
+            // console.log(this.body);
+            // console.log(this.grid);
+            // console.log(grid);
             return grid;
         },
         sortedLeaderBoard() {
@@ -189,5 +192,14 @@ export default {
 }
 .actions-container > div {
     margin: 0pt 5pt;
+}
+
+table {
+    width: 100%;
+    border: 1pt solid;
+}
+
+tr:nth-child(2n + 1) {
+    background-color: lightgoldenrodyellow;
 }
 </style>

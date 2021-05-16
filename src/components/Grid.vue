@@ -1,7 +1,13 @@
 <template>
     <div class="grid">
         <div class="row" v-for="(row, jndex) in grid" :key="jndex">
-            <Cell v-for="(cell, index) in row" :key="index" :status="cell" />
+            <Cell
+                v-for="(cell, index) in row"
+                :key="index"
+                :status="cell"
+                :data-x="index"
+                :data-y="jndex"
+            />
         </div>
     </div>
 </template>

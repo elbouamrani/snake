@@ -34,6 +34,7 @@ const SnakeService = {
 			return null;
 		}
 
+		//check for self collision by comparing snake body with current head position
 		const collision = body.find((section) => {
 			return section.x == x && section.y == y;
 		});
@@ -48,14 +49,20 @@ const SnakeService = {
 		if (grid[y][x] == 3) {
 			// console.log("food collision");
 			const matrix = SnakeService.generateFood(grid);
+
+			//reset cell to empty
 			matrix[y][x] = 0;
 
-			const newBody = [...body];
+			const newBody = JSON.parse(JSON.stringify(body));
 
 			newBody.push({
 				x: position[1],
 				y: position[0],
 			});
+
+			// console.log(
+			// 	JSON.stringify({ position, last: newBody.length && newBody[0] })
+			// );
 
 			return {
 				status: "gain",
